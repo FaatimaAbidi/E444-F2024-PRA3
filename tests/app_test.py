@@ -92,6 +92,6 @@ def test_login_required(client):
     with app.test_request_context():
         @login_required
         def to_be_decorated():
-            return True
+            return ("hello world", 200)
         response = to_be_decorated()
         assert response[1] == 401
