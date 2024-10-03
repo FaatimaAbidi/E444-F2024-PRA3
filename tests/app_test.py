@@ -7,6 +7,7 @@ from project.app import app, db, login_required
 
 TEST_DB = "test.db"
 
+
 @pytest.fixture
 def client():
     BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,9 +31,11 @@ def login(client, username, password):
         follow_redirects=True,
     )
 
+
 def logout(client):
     """Logout helper function"""
     return client.get("/logout", follow_redirects=True)
+
 
 def test_index(client):
     response = client.get("/", content_type="html/text")
@@ -75,10 +78,12 @@ def test_messages(client):
     assert b"&lt;Hello&gt;" in rv.data
     assert b"<strong>HTML</strong> allowed here" in rv.data
 
+
 def test_search(client):
     """Ensure search works"""
     response = client.get("/search/?query=hello", content_type="html/text")
     assert response.status_code == 200
+
 
 def test_delete_message(client):
     """Ensure the messages are being deleted"""
@@ -90,10 +95,13 @@ def test_delete_message(client):
     data = json.loads(rv.data)
     assert data["status"] == 1
 
+
 def test_login_required(client):
     with app.test_request_context():
+
         @login_required
         def to_be_decorated():
             return ("hello world", 200)
+
         response = to_be_decorated()
         assert response[1] == 401
